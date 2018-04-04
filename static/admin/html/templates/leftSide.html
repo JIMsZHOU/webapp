@@ -1,0 +1,18 @@
+<div>
+    <div class="left-side">
+        <div class="top-area">
+            <div class="image-area">
+                <img src="{{img}}" />
+            </div>
+            <p class="name-text">{{name}} <a class="logout-link" ui-sref="login">退出</a></p>
+        </div>
+        <div class="center-body">
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" ng-click="clickFunc($index)" ng-repeat="btn in btns track by $index" ng-class="{'active': btn.checked}">
+                    <a>{{btn.name}}</a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>

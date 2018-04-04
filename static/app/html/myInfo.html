@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ppt微信</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../css/common.css" />
+
+</head>
+<body>
+<div class="page-group myInfo-page">
+    <div class="page page-current" id="myInfo-page">
+        <nav class="bar bar-tab">
+            <a class="tab-item external" href="../index.html">
+                <span class="icon icon-menu"></span>
+                <span class="tab-label">列表</span>
+            </a>
+            <a class="tab-item external" href="display.html">
+                <span class="icon icon-share"></span>
+                <span class="tab-label">PPT</span>
+            </a>
+            <a class="tab-item external active" href="myInfo.html">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我</span>
+            </a>
+        </nav>
+        <div class="content">
+            <div class="head-img-container">
+                <div class="index-top-bg">
+                    <img src="../image/bg.png" />
+                </div>
+                <div class="head-img-wrap">
+                    <img src="../image/img_22.jpg" />
+                </div>
+                <p class="user-name"></p>
+            </div>
+            <div class="content-block-title">我的信息</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                            <span class="ionc-wrap">
+                                <span class="icon icon-share"></span>
+                            </span>
+                                <span class="text">学院</span>
+                            </div>
+                            <div class="item-after school-value"></div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                            <span class="ionc-wrap">
+                                <span class="icon icon-share"></span></span>
+                                <span class="text">专业</span>
+                            </div>
+                            <div class="item-after major-name"></div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                            <span class="ionc-wrap">
+                                <span class="icon icon-share"></span></span>
+                                <span class="text">学号</span>
+                            </div>
+                            <div class="item-after number-name"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-block-title">我的记录</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content history-item item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                            <span class="ionc-wrap">
+                                <span class="fa fa-share-square-o"></span>
+                            </span>
+                                <span class="text">浏览记录</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="content-block-title">我的操作</div>
+            <div class="list-block">
+                <ul class="operation-btns">
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">
+                            <span class="ionc-wrap">
+                                <span class="icon icon-share"></span>
+                            </span>
+                                <a class="text operation-btn" href="javascript:;">登录</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="panel-overlay"></div>
+<div class="panel panel-left panel-reveal">
+    <div class="content-block">
+        <p>这是一个侧栏</p>
+        <p></p>
+        <p><a href="#" class="close-panel">关闭</a></p>
+    </div>
+</div>
+
+
+<script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript">
+
+    $.config = {router: false};
+
+    $.ajax({
+        type:"get",
+        dataType:"json",
+        url:"/user/sessionUser",
+        success:function(data){
+            if(data.status == 0){
+                $(".operation-btns .operation-btn").html("退出");
+                $(".user-name").html(data.body.name);
+                $(".school-value").html(data.body.school);
+                $(".major-name").html(data.body.major);
+                $(".number-name").html(data.body.num);
+            }else{
+                $(".operation-btns .operation-btn").html("登录");
+            }
+        }
+    });
+    $(".operation-btns li").on("click",function(){
+        if($(this).find(".operation-btn").html() == '登录'){
+            location.href = "login.html";
+        }else{
+            $.ajax({
+                url:"/user/logout",
+                type:"get",
+                dataType:"json",
+                success:function(data){
+                    if(data.status == 0){
+                        location.href = "login.html";
+                    }
+                }
+            });
+        }
+    });
+
+    $.init()
+</script>
+</body>
+</html>

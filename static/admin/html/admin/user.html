@@ -1,0 +1,94 @@
+<div ng-controller="user">
+    <ul class="nav nav-tabs" role="tablist">
+        <li ng-repeat="tabs in data track by $index" ng-click="clickFunc($index)" ng-class="{'active':tabs.checked}">
+            <a href="javascript:;" >{{tabs.name}}</a>
+        </li>
+    </ul>
+    <div class="form-group search-box" ng-show="isTeacher">
+        <input type="email" class="form-control" id="input-search" ng-model="keyword" ng-keyup="searchClass()" placeholder="输入课程名">
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane" ng-show="data[0].checked">
+            <div class="search-class">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">学生名字 <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:;">学生名字</a></li>
+                            <li><a href="javascript:;">学生学号</a></li>
+                        </ul>
+                    </div><!-- /btn-group -->
+                    <input type="text" class="form-control search-keyword" placeholder="按学生名字搜索">
+                </div><!-- /input-group -->
+            </div><!-- /.row -->
+            <table class="table table-striped table-bordered table-hover table-display-data">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>学号</th>
+                    <th>初始密码</th>
+                    <th>学院</th>
+                    <th>专业</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="car in CarList">
+                    <td>{{$index + 1}}</td>
+                    <td>{{car.name}}</td>
+                    <td>{{car.num}}</td>
+                    <td>{{car.password}}</td>
+                    <td>{{car.school}}</td>
+                    <td>{{car.major}}</td>
+                    <td class="operation-area">
+                        <button type="button" ng-click="delete(car._id)" class="btn btn-warning">删除</button>
+                        <button type="button" ng-click="modify(car)" class="btn btn-warning">修改</button>
+                        <button type="button" ng-click="lookOver(car)" class="btn btn-warning">详情</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav-navigation url="/user/list?currentPage=" data="CarList"></nav-navigation>
+        </div>
+        <div class="tab-pane" ng-if="data[1].checked">
+            <div class="modify-form">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label >学生学号</label>
+                        <input type="text" class="form-control" ng-model="modifyData.num" placeholder="学生学号">
+                    </div>
+                    <div class="form-group">
+                        <label >姓&emsp;&emsp;名</label>
+                        <input type="text" class="form-control" ng-model="modifyData.name" placeholder="姓名">
+                    </div>
+                    <div class="form-group">
+                        <label >初始密码</label>
+                        <input type="text" class="form-control class-teacher" ng-model="modifyData.password" placeholder="初始密码">
+                    </div>
+                    <div class="form-group">
+                        <label >学&emsp;&emsp;院</label>
+                        <input type="text" class="form-control" ng-model="modifyData.school" placeholder="学院">
+                    </div>
+                    <div class="form-group">
+                        <label >专&emsp;&emsp;业</label>
+                        <input type="text" class="form-control" ng-model="modifyData.major" placeholder="专业">
+                    </div>
+                    <button type="button" class="submit-data normal-btn btn btn-primary" ng-click="addStudent()">提交</button>
+                </form>
+            </div>
+
+        </div>
+        <div class="tab-pane" ng-if="data[2].checked">
+            <div class="info-area">
+                <h3>{{detail.name}}</h3>
+                <p><span class="detail-title">学号：</span><span>{{detail.num}}</span></p>
+                <p><span class="detail-title">初始密码：</span><span>{{detail.password}}</span></p>
+                <p><span class="detail-title">学院：</span><span>{{detail.school}}</span></p>
+                <p><span class="detail-title">专业：</span><span>{{detail.major}}</span></p>
+            </div>
+        </div>
+    </div>
+</div>

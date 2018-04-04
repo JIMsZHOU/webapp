@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ppt微信</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../css/common.css" />
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current">
+        <header class="bar bar-nav">
+            <a class="icon icon-left pull-left back"></a>
+            <h1 class="title">顺序练题</h1>
+        </header>
+        <div class="content">
+            <div class="question-list-area" id="question-area">
+            </div>
+        </div>
+        <div class="question-total-list">
+            <span class="fa fa-check-square"></span>
+            <span class="right-question">0</span>
+            <span class="fa fa-times-rectangle"></span>
+            <span class="error-number">0</span>
+            <span class="fa fa-th-large"></span>
+            <span class="has-done-question">0</span>
+            <span>/</span>
+            <span class="total-question"></span>
+        </div>
+
+        <div class="bg-area"></div>
+        <div class="popup-area"></div>
+    </div>
+</div>
+
+<script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript" src="../libs/hammer.js"></script>
+<script type="text/javascript">
+    $.config = {router: false};
+    // 获取题目
+
+    var currentPage = 0;
+    var totalPage = 0;
+    var trueNum = 0;
+    var errorNum = 0;
+    var doneNum = 0;
+
+    $.ajax({
+        url:"/question/test",
+        dataType:"json",
+        type:"get",
+        success:function(data){
+            if(data.status == 0){
+                var htmlStr = "";
+                var questionStr = "";
+                totalPage = data.body.length;
+                for(var i = 0; i < data.body.length; i++){
+                    var questionType = data.body[i].type == 1?'单选题':'判断题';
+                    var answerStr = '';
+                    var trueAnswer = ['A','B','C','D'];
+                    var answer = "";
+                    if(data.body[i].answer){
+                        answer = trueAnswer[data.body[i].answer];
+                    }
+                    if(data.body[i].options[2]){
+                        answerStr += '<p class="answer"><span>C</span><span>'+ data.body[i].options[2] +'</span></p>';
+                    }
+                    if(data.body[i].options[3]){
+                        answerStr += '<p class="answer"><span>D</span><span>' + data.body[i].options[3] + '</span></p>';
+                    }
+                    htmlStr += '<div class="question-item" index="'+ i +'">'+
+                            '<p>'+
+                            '<span class="hint-question-type">'+ questionType +'</span>'+
+                            '<span class="question-content">'+ data.body[i].content +'？</span>'+
+                            '<span class="question-score">'+ data.body[i].score +'分</span>'+
+                            '</p>'+
+                            '<p class="answer"><span>A</span><span>'+ data.body[i].options[0] +'</span></p>'+
+                            '<p class="answer"><span>B</span><span>'+ data.body[i].options[1] +'</span></p>'+ answerStr +
+                            '<div class="answer-area"><p class="answer-desc">正确答案：<span>' + answer + '</span></p>'+
+                            '<p>答案解析</p>'+
+                            '<p>'+ data.body[i].detail +'</p>'+
+                            '<p class="answer-desc">知识点：<span>'+ data.body[i].keyword +'</span>难度：<span>'+ data.body[i].degree +'</span></p>'+
+                            '</div></div>';
+                    questionStr += '<div class="question-item-circle">'+ (i + 1) +'</div>';
+                }
+                $(".question-list-area").html(htmlStr);
+                $(".question-item").eq(0).addClass("current-question");
+
+                $(".answer").click(function(){
+                    var num = $(this).parents(".question-item").attr("index");
+                    var index = $(this).parents(".question-item").find(".answer").index(this);
+                    if(data.body[num].answer == index){
+                        $(this).find("span").eq(0).addClass("success icon icon-check").html("");
+                        trueNum++;
+                        $(".question-total-list .right-question").html(trueNum);
+                        $(".question-item-circle").eq(num).addClass("success");
+                    }else{
+                        $(this).find("span").eq(0).addClass("error fa fa-times").html("");
+                        $(this).parents(".question-item").find(".answer").eq(data.body[num].answer).find("span").eq(0).addClass("success icon icon-check").html("");
+                        errorNum++;
+                        $(".question-total-list .error-number").html(errorNum);
+                        $(".question-item-circle").eq(num).addClass("error");
+                    }
+                    doneNum++;
+                    $(".question-total-list .has-done-question").html(doneNum);
+                    $(this).parents(".question-item").find(".answer").unbind("click");
+                    $(this).parents(".question-item").find(".answer-area").addClass("active");
+                });
+
+
+                // 添加题目列表
+                $(".question-total-list .total-question").html(data.body.length);
+                $(".popup-area").html(questionStr);
+                $(".question-item-circle").click(function(){
+                    var index = parseInt($(this).html()) - 1;
+                    currentPage = index;
+                    $(".question-item").removeClass("disappear-question down-page current-question");
+                    $(".question-item").eq(currentPage).addClass("down-page");
+                    $(".bg-area,.popup-area,.question-total-list").removeClass("active").addClass("notShow");
+                });
+            }
+        }
+    });
+    var hammer = new Hammer(document.getElementById("question-area"));
+    // 向左滑动,修改当前页
+    hammer.on("swipeleft",function(){
+        if(currentPage < totalPage){
+            currentPage++;
+            $(".question-item").removeClass("disappear-question down-page current-question");
+            $(".question-item").eq(currentPage - 1).addClass("down-page");
+            $(".question-item").eq(currentPage).addClass("current-question");
+        }
+    });
+    // 向右滑动
+    hammer.on("swiperight",function(){
+        if(currentPage > 0){
+            currentPage--;
+            $(".question-item").removeClass("disappear-question down-page current-question");
+            $(".question-item").eq(currentPage).addClass("down-page");
+            $(".question-item").eq(currentPage + 1).addClass("disappear-question");
+        }
+    });
+
+    $(".question-total-list").click(function(){
+        $(".bg-area,.popup-area,.question-total-list").removeClass("notShow").addClass("active");
+    });
+
+    // 取消查看
+    $(".bg-area").on("click",function(){
+        $(".bg-area,.popup-area,.question-total-list").removeClass("active").addClass("notShow");
+    });
+
+    //    $.init()
+</script>
+</body>
+</html>

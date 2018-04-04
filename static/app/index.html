@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ppt微信</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="css/common.css" />
+</head>
+<body>
+<div class="page-group">
+    <div class="page page-current" id="home-page">
+        <nav class="bar bar-tab">
+            <a class="tab-item external active" href="index.html">
+                <span class="icon icon-home"></span>
+                <span class="tab-label">首页</span>
+            </a>
+            <a class="tab-item external" href="index.html">
+                <span class="icon icon-menu"></span>
+                <span class="tab-label">错题本</span>
+            </a>
+
+            <a class="tab-item external" href="html/myInfo.html">
+                <span class="icon icon-me"></span>
+                <span class="tab-label">我</span>
+            </a>
+        </nav>
+        <div class="content">
+            <div class="swiper-container" id="home-page-banner" data-space-between='10'>
+                <div class="index-top-bg">
+                    <img src="image/bg.png" />
+                </div>
+                <div class="swiper-wrapper">
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <!--最新新闻-->
+            <div class="product-list news-list">
+                <p class="product-title">选项</p>
+                <hr class="sub-line" />
+                <div class="select-area">
+                    <div class="practice-item">
+                        <div class="circle-btn">
+                            <span>顺序练题</span>
+                        </div>
+                    </div>
+                    <div class="exam-item">
+                        <div class="circle-btn">
+                            <span>模拟考试</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-overlay"></div>
+<div class="panel panel-left panel-reveal">
+    <div class="content-block">
+        <p>这是一个侧栏</p>
+        <p></p>
+        <p><a href="#" class="close-panel">关闭</a></p>
+    </div>
+</div>
+
+
+<script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript">
+    $.config = {router: false};
+    // 获取banner
+    http.getData("/ad/getAdList",function(data){
+        if(data.status == 0 && data.body.length > 0){
+            var htmlStr = '';
+            for(var i = 0; i < data.body.length; i++){
+                htmlStr += '<div class="swiper-slide"><img src="'+ window.picAddr + data.body[i].pic +'" alt=""></div>';
+            }
+            $(".swiper-wrapper").html(htmlStr);
+            $(".swiper-container").swiper({
+                initialSlide:0
+            });
+        }
+    });
+    // 进入练题界面
+    $(".circle-btn").click(function(){
+        location.href = "html/question.html";
+    });
+//    $.init()
+</script>
+<script type="text/javascript">
+    var judgeArr = [];
+    var selectArr = [];
+    for(var i = 0; i < 100; i++){
+        judgeArr[i] = {
+            score:2,
+            degree: Math.floor(Math.random() * 5) + 1,
+            id:i
+        };
+        selectArr[i] = {
+            score:3,
+            degree: Math.floor(Math.random() * 5) + 1,
+            id:100 + i
+        };
+    }
+    testFunc(12,judgeArr,selectArr);
+    function testFunc(score,judgeArr,selectArr){
+        var totalScore = 100;
+        var judgeAll = 20;   // 判断题题数
+        var selectAll = 20;   // 选择题题数
+        var questionList = [];   // 群体数组
+        var questionLen = 20;    // 群体长度
+        var loopNum = 250;   // 循环次数
+        // 根据总分和试题比例生成群体
+        for(var i = 0; i < questionLen; i++){
+            questionList[i] = [];
+            // 生成随机数范围
+            var judgeRandom = [];
+            var selectRandom = [];
+            for(var randomI = 0; randomI < judgeArr.length; randomI++){
+                judgeRandom[randomI] = randomI;
+            }
+            for(var randomI = 0; randomI < selectArr.length; randomI++){
+                selectRandom[randomI] = randomI;
+            }
+            for(var j = 0; j < judgeAll; j++){   // 生成判断题
+                var num = Math.floor(Math.random() * judgeRandom.length);
+                var index = judgeRandom[num];
+                questionList[i].push(judgeArr[index]);
+                judgeRandom.splice(num,1);
+            }
+            for(var j = 0; j < selectAll; j++){   // 生成选择题
+                var num = Math.floor(Math.random() * selectRandom.length);
+                var index = selectRandom[num];
+                questionList[i].push(selectArr[index]);
+                selectRandom.splice(num,1);
+            }
+        }
+
+        // 迭代循环
+        for(var i = 0; i < loopNum; i++){
+            getBestQuestion();
+        }
+
+        questionList.sort(function(a,b){   // 根据难度系数与去期望值差值排序
+            return Math.abs(b.degree - score) - Math.abs(a.degree - score);
+        });
+
+        return questionList[0];
+
+        // 计算每套题的难度系数，剔除后10
+        function getBestQuestion(){
+            var middleIndex = 10;
+
+            getParam();   // 获取每套题的难度系数
+
+            questionList.sort(function(a,b){   // 根据难度系数与去期望值差值排序
+                return Math.abs(a.degree - score) - Math.abs(b.degree - score);
+            });
+            var arrList = [];
+            for(var i = 0; i < questionList.length; i++){
+                arrList.push(Math.abs(questionList[i].degree - score));
+            }
+//            console.log(arrList);
+            console.log(questionList[0].degree);
+
+            // 生成后代
+            getChildren(middleIndex);
+
+            // 增加变异
+            getChange();
+
+        }
+        // 生成后代
+        function getChildren(endIndex){
+            var arr = [];
+            var indexArr = [0,1,2,3,4,5,6,7,8,9];
+            for(var i = 0; i < endIndex; i++){
+                var num = Math.floor(Math.random() * indexArr.length);
+                arr.push(indexArr[num]);
+                indexArr.splice(num,1);
+            }
+            for(var i = 0; i < arr.length; i += 2){
+                for(var j = 0; j < questionList[arr[i]].length;j++){
+                    var boolean = Math.floor(Math.random() * 2);
+                    if(boolean == 0){
+                        questionList[endIndex + i][j] = questionList[arr[i]][j];
+                    }else{
+                        questionList[endIndex + i][j] = questionList[arr[i + 1]][j];
+                    }
+                    boolean = Math.floor(Math.random() * 2);
+                    if(boolean == 0){
+                        questionList[endIndex + i + 1][j] = questionList[arr[i]][j];
+                    }else{
+                        questionList[endIndex + i + 1][j] = questionList[arr[i + 1]][j];
+                    }
+                }
+            }
+        }
+
+        // 变异
+        function getChange(){
+            var changeRandom = 0.05;
+            for(var i = 0; i < questionList.length; i++){
+                for(var j = 0; j < questionList[i].length; j++){
+                    var num = Math.random();
+                    if(num <= changeRandom){    // 变异
+                        var index = 0;
+                        if(j < judgeAll){
+                            index = Math.floor(num * judgeArr.length);
+                            questionList[i][j] = judgeArr[index];
+                        }else{
+                            index = Math.floor(num * selectArr.length);
+                            questionList[i][j] = selectArr[index];
+                        }
+                    }
+                }
+            }
+        }
+
+        // 计算一套题的难度系数
+        function getParam(){
+            for(var i = 0; i < questionLen; i++) {
+                var middleValue = 0;
+                for (var j = 0; j < questionList[i].length; j++) {
+                    middleValue += questionList[i][j].score * (5 - questionList[i][j].degree + 1) / 5;
+                }
+                questionList[i].degree = Math.round(middleValue / totalScore * 100);
+            }
+        }
+    }
+</script>
+</body>
+</html>

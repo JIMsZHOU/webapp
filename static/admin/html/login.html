@@ -1,0 +1,14 @@
+<div ng-controller="login">
+    <div class="form-area">
+        <h2 class="text-success text-center">登录</h2>
+        <div class="form-group">
+            <label></label>
+            <input type="text" class="form-control" ng-model="submitData.username" placeholder="请输入你的用户名">
+        </div>
+        <div class="form-group">
+            <label></label>
+            <input type="password" class="form-control" ng-model="submitData.password" placeholder="请输入你的密码">
+        </div>
+        <button type="submit" class="btn btn-warning submit-btn" ng-click="submit()">登录</button>
+    </div>
+</div>

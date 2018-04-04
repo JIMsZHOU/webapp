@@ -1,0 +1,17 @@
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li>
+            <a href="javascript:;" aria-label="Previous" ng-click="getPrePage()">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li ng-repeat="value in navValue" ng-click="getCurrentPage(value)"  ng-class="{'active':value == currentPage}">
+            <a href="javascript:;">{{value}}</a>
+        </li>
+        <li>
+            <a href="javascript:;" aria-label="Next" ng-click="getNextPage()">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

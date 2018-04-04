@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ppt微信</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="http://g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="../css/common.css" />
+
+</head>
+<body>
+<div class="page-group myInfo-page">
+    <div class="page page-current" id="myInfo-page">
+        <h2 class="form-title">登录</h2>
+        <div class="form-group">
+            <input type="text" class="input-username" placeholder="输入用户名" />
+        </div>
+        <div class="form-group">
+            <input type="password" class="input-password" placeholder="输入密码" />
+        </div>
+        <div class="form-group">
+            <button class="button block-btn">登录</button>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="panel-overlay"></div>
+<div class="panel panel-left panel-reveal">
+    <div class="content-block">
+        <p>这是一个侧栏</p>
+        <p></p>
+        <p><a href="#" class="close-panel">关闭</a></p>
+    </div>
+</div>
+
+
+<script type='text/javascript' src='http://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='http://g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type="text/javascript" src="../js/common.js"></script>
+<script type="text/javascript">
+
+    $.config = {router: false};
+
+    // 登录
+    $(".block-btn").click(function(){
+        if(!$(".input-username").val() || !$(".input-password").val()){
+            $.toast("输入框不能为空");
+            return false;
+        }
+        var param = {
+            username:$(".input-username").val(),
+            password:$(".input-password").val()
+        };
+        $.ajax({
+            url:"/user/login",
+            type:"post",
+            dataType:"json",
+            data:JSON.stringify(param),
+            contentType:"application/json",
+            success:function(data){
+                if(data.status == 0){
+                    location.href = "../index.html";
+                }else{
+                    $.toast(data.msg);
+                }
+            }
+        });
+    });
+
+    $.init()
+</script>
+</body>
+</html>
